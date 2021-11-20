@@ -20,14 +20,35 @@ class StudentController extends Controller
     }
 
     public function store(Request $request){
-        $input= [
+
+        $validationData =
+        $request->validate([
+            "nama"  => 'required',
+            "nim"   => 'required|numeric',
+            "email" => 'required|email',
+            "jurusan" => 'required'
+        ],
+        [
+            'nama.required' => 'Harus Diisi!',
+
+            'nim.required' => 'Harus Diisi!',
+            'nim.numeric' => 'Harus diisi angka',
+
+            'email.required' => 'Harus Diisi!',
+            'email.email' => "Harus pake email yang bener (pake '@')",
+
+            'jurusan.required' => 'Harus Diisi!'
+        ],
+    );
+
+        /* $input= [
             'nama'  =>  $request->nama,
             'nim'   =>  $request->nim,
             'email' =>  $request->email,
             'jurusan'   => $request->jurusan
-        ];
+        ]; */ //dah gk kepake karena dh ditampung di variabel $validationData
 
-        $student = Student::create($input);
+        $student = Student::create($validationData);
 
         $data = [
             'message' => "data berhasil ditambahkan",
@@ -101,4 +122,5 @@ class StudentController extends Controller
             return response()->json($data, 404);
         }
     }
+
 }
